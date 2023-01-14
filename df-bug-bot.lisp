@@ -56,7 +56,7 @@
             (let ((poll? (post-poll-p)))
               (post (generate-post)
                     :poll-options (when poll? '("Bug?" "Feature?"))
-                    :poll-timeout (time-to-seconds 1 :hour))))))
+                    :poll-timeout (when poll? (time-to-seconds 1 :hour)))))))
     
     (user-abort ()
       (uiop:quit))))
