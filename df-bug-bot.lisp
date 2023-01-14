@@ -50,7 +50,7 @@
           ;; after every 4 days (and 13 min) refresh the bug list
           ;;  this should hopefully not overlap with the posting, 
           ;;  because that might mess things up 
-          (after-every (5773 :minutes :async t)
+          (after-every ((time-to-seconds 4 :days 13 :min) :seconds :async t)
             (refresh-csv-file))
           
           ;; post a random bug every hour
