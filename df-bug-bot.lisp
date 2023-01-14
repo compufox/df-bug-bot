@@ -30,6 +30,8 @@
 
 (defun main ()
   "main binary entry point"
+
+  (setf *random-state* (make-random-state t))
   
   ;; go ahead and download our CSV file
   (refresh-csv-file)
