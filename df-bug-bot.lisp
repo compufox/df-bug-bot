@@ -38,7 +38,9 @@
   (setf *random-state* (make-random-state t))
   
   ;; go ahead and download our CSV file
-  (refresh-csv-file)
+  ;;  if it doesnt exist
+  (unless (uiop:file-exists-p *csv-file*)
+    (refresh-csv-file))
   
   (handler-case
       (with-user-abort
