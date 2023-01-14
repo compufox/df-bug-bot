@@ -4,6 +4,10 @@
 
 (defvar *csv-file* #P"df-bugs.csv")
 (defvar *parsed-csv* nil)
+(defvar *poll-chances* 0.25)
+
+(defun post-poll-p ()
+  (>= *poll-chances* (random 1.0)))
 
 (defun parse-csv ()
   "removes all bugs that aren't currently open"
@@ -49,7 +53,10 @@
           
           ;; post a random bug every hour
           (after-every (1 :hour :run-immediately t)
-            (post (generate-post)))))
+            (let ((poll? (post-poll-p)))
+              (post (generate-post)
+                    :poll-options (when poll? '("Bug?" "Feature?"))
+                    :poll-timeout (time-to-seconds 1 :hour))))))
     
     (user-abort ()
       (uiop:quit))))
