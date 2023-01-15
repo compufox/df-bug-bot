@@ -6,7 +6,7 @@
   :license  "NPLv1+"
   :version "0.0.1"
   :serial t
-  :depends-on (#:glacier #:cl-csv #:with-user-abort)
+  :depends-on (#:glacier #:cl-csv #:with-user-abort #:cl-ppcre)
   :components ((:file "package")
                (:file "df-bug-bot"))
   :entry-point "df-bug-bot:main"
