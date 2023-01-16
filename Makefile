@@ -15,5 +15,8 @@ ifeq ($(LISP),)
 	$(error "No lisps found")
 endif
 
-all: 
+all:
 	$(LISP) $(CMDS)
+
+clean:
+	test -d bin && rm bin/df-bug-bot
