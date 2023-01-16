@@ -58,10 +58,10 @@
           
           ;; post a random bug every hour
           (after-every (1 :hour :run-immediately t)
-            (let ((poll? nil))
-             (post (generate-post)
-                   :poll-options (when poll? '("Bug?" "Feature?"))
-                   :poll-timeout (when poll? 3600))))))
+            (let ((poll? (post-poll-p)))
+              (post (generate-post)
+                    :poll-options (when poll? '("Bug?" "Feature?"))
+                    :poll-timeout (when poll? 3600))))))
 
     (error (e)
       (format t "~A~%" e)
