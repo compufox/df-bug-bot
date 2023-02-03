@@ -60,7 +60,7 @@
           (after-every (1 :hour :run-immediately t)
             (let ((poll? (post-poll-p)))
               (post (generate-post)
-                    :poll-options (when poll? '("Bug?" "Feature?"))
+                    :poll-options (when poll? '("Bug?" "Feature?" "Normal dwarven behavior?"))
                     :poll-timeout (when poll? 3600))))))
 
     (error (e)
