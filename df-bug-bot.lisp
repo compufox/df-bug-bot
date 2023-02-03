@@ -32,7 +32,7 @@
 (defun generate-post ()
   "generates a post"
   (let ((bug (get-random-bug)))
-    (format nil "~A: ~A" (nth 0 bug) (nth 11 bug))))
+    (format nil "(~A) ~A: ~A" (nth 8 bug) (nth 0 bug) (nth 11 bug))))
 
 (defun main ()
   "main binary entry point"
