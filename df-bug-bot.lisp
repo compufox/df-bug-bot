@@ -2,10 +2,17 @@
 
 (in-package #:df-bug-bot)
 
+(declaim (inline reinitizalize-random-state post-poll-p get-random-bug))
+
 (defvar *csv-file* #P"df-bugs.csv")
 (defvar *parsed-csv* nil)
 (defvar *poll-chances* 0.25)
 (defvar *csv-regex* "(?m)^[0-9]{7,}.+,(open|reopened|unable to reproduce|not fixable|suspended|won't fix),.+$")
+(defvar *recent-ids* nil
+  "a list containing the 5 most recent bug ids")
+
+(defun reinitizalize-random-state ()
+  (setf *random-state* (make-random-state t)))
 
 (defun post-poll-p ()
   (>= *poll-chances* (random 1.0)))
@@ -30,14 +37,26 @@
   (nth (random (length *parsed-csv*)) *parsed-csv*))
 
 (defun generate-post ()
-  "generates a post"
-  (let ((bug (get-random-bug)))
-    (format nil "~A: ~A" (nth 0 bug) (nth 11 bug))))
+  "fetches a random bug and generates a post with it"
+  (loop :with bug := (get-random-bug)
+        :until (not (member (nth 0 bug) *recent-ids* :test #'string=))
+        :do (setf bug (get-random-bug))
+
+            ;; when we finally have a new bug we push the
+            ;; bug id into the recent-id list and make sure that
+            ;; we only have the most recent ids cached.
+            ;;  then we redo the random state just for kicks
+            ;;  before returning the text for the post
+        :finally
+           (push (nth 0 bug) *recent-ids*)
+           (setf *recent-ids* (subseq *recent-ids* 0 (min (length *recent-ids*) 5)))
+           (reinitizalize-random-state)
+           (return (format nil "~A: ~A" (nth 0 bug) (nth 11 bug)))))
 
 (defun main ()
   "main binary entry point"
 
-  (setf *random-state* (make-random-state t))
+  (reinitizalize-random-state)
   
   ;; download our csv file if it doesnt exist
   ;; if its already downloaded go ahead and parse it
