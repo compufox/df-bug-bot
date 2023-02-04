@@ -4,17 +4,23 @@
 
 (declaim (inline reinitizalize-random-state post-poll-p get-random-bug))
 
-(defvar *csv-file* #P"df-bugs.csv")
-(defvar *parsed-csv* nil)
-(defvar *poll-chances* 0.25)
-(defvar *csv-regex* "(?m)^[0-9]{7,}.+,(open|reopened|unable to reproduce|not fixable|suspended|won't fix),.+$")
+(defvar *csv-file* #P"df-bugs.csv"
+  "path to our CSV file")
+(defvar *parsed-csv* nil
+  "a list that contains our parsed CSV")
+(defvar *poll-chances* 0.25
+  "the chances for posting a status with a poll")
+(defvar *csv-regex* "(?m)^[0-9]{7,}.+,(open|reopened|unable to reproduce|not fixable|suspended|won't fix),.+$"
+  "regex used for pre-processing the downloaded CSV file")
 (defvar *recent-ids* nil
   "a list containing the 5 most recent bug ids")
 
 (defun reinitizalize-random-state ()
+  "reinitializes the random state with a new one"
   (setf *random-state* (make-random-state t)))
 
 (defun post-poll-p ()
+  "checks if we should post a poll"
   (>= *poll-chances* (random 1.0)))
 
 (defun parse-csv (csv)
