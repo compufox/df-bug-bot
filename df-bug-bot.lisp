@@ -45,7 +45,9 @@
 (defun generate-post ()
   "fetches a random bug and generates a post with it"
   (loop :with bug := (get-random-bug)
-        :until (not (member (nth 0 bug) *recent-ids* :test #'string=))
+        :until (and (not (member (nth 0 bug) *recent-ids* :test #'string=))
+                    (nth 11 bug)
+                    (not (str:emptyp (nth 11 bug))))
         :do (setf bug (get-random-bug))
 
             ;; when we finally have a new bug we push the
