@@ -45,7 +45,12 @@
 (defun generate-post ()
   "fetches a random bug and generates a post with it"
   (loop :with bug := (get-random-bug)
-        :until (and (not (member (nth 0 bug) *recent-ids* :test #'string=))
+
+        ;; loops until we meet the following criteria:
+        ;;  1- the bug hasnt been posted recently (last 5 posts)
+        ;;  2- the bug text itself exists
+        ;;  3- the bug text isnt an empty string
+        :until (and (not (member (nth 0 bug) *recent-ids* :test #'string=)) 
                     (nth 11 bug)
                     (not (str:emptyp (nth 11 bug))))
         :do (setf bug (get-random-bug))
