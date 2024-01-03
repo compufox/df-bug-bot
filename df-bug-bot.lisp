@@ -14,6 +14,8 @@
   "regex used for pre-processing the downloaded CSV file")
 (defvar *recent-ids* nil
   "a list containing the 5 most recent bug ids")
+(defvar *bug-tracker-url* "https://dwarffortressbugtracker.com/csv_export.php"
+  "link to the DF bug tracker CSV export")
 
 (defun reinitizalize-random-state ()
   "reinitializes the random state with a new one"
@@ -32,7 +34,7 @@
 
 (defun refresh-csv-file ()
   "downloads the bug CSV file and writes it to *CSV-FILE*"
-  (let ((csv-string (drakma:http-request "https://dwarffortress.mantishub.io/csv_export.php")))
+  (let ((csv-string (drakma:http-request *bug-tracker-url*)))
     (str:to-file *csv-file*
                  (str:join (string #\newline)
                            (parse-csv csv-string)))
